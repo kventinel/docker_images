@@ -1,7 +1,6 @@
-FROM ubuntu:18.04
+FROM ubuntu:19.04
 
-RUN apt update
-RUN apt full-upgrade
+RUN apt update && apt full-upgrade
 
 ###########################
 ### NVIDIA
@@ -21,9 +20,9 @@ ENV CUDA_PKG_VERSION 10-1=$CUDA_VERSION-1
 
 # For libraries in the cuda-compat-* package: https://docs.nvidia.com/cuda/eula/index.html#attachment-a
 RUN apt update && apt install -y --no-install-recommends \
-        cuda-cudart-$CUDA_PKG_VERSION \
-cuda-compat-10-1 && \
-ln -s cuda-10.1 /usr/local/cuda && \
+    cuda-cudart-$CUDA_PKG_VERSION \
+    cuda-compat-10-1 && \
+    ln -s cuda-10.1 /usr/local/cuda && \
     rm -rf /var/lib/apt/lists/*
 
 # Required for nvidia-docker v1
@@ -40,7 +39,7 @@ ENV NVIDIA_REQUIRE_CUDA "cuda>=10.1 brand=tesla,driver>=384,driver<385 brand=tes
 
 ENV NCCL_VERSION 2.4.8
 
-RUN apt install -y --no-install-recommends \
+RUN apt update && apt install -y --no-install-recommends \
     cuda-libraries-$CUDA_PKG_VERSION \
     cuda-nvtx-$CUDA_PKG_VERSION \
     libnccl2=$NCCL_VERSION-1+cuda10.1 && \
@@ -59,10 +58,4 @@ RUN apt install -y --no-install-recommends \
 ### My libraries
 ##########################
 
-RUN pip install numpy
-RUN pip install tqdm
-RUN pip install scipy
-RUN pip install scikit-learn
-RUN pip install tensorflow-gpu
-RUN pip install torch
-RUN pip install torchvision
+RUN pip install numpy tqdm scipy scikit-learn tensorflow-gpu torch torchvision
