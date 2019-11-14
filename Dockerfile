@@ -70,7 +70,7 @@ RUN apt-get update && \
 
 RUN apt-get update && apt-get install -y python3-pip
 
-RUN pip install numpy \
+RUN pip3 install numpy \
     pandas \
     tqdm \
     scipy \
@@ -78,4 +78,6 @@ RUN pip install numpy \
     tensorflow-gpu \
     torch \
     torchvision \
-    nltk
+    nltk \
+    ipython \
+    jupiter
