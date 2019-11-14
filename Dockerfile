@@ -75,8 +75,9 @@ RUN pip3 install numpy \
     tqdm \
     scipy \
     scikit-learn \
-    tensorflow-gpu \
-    torch \
+    tensorflow-gpu
+
+RUN pip3 install torch \
     torchvision \
     nltk \
     ipython \
