@@ -1,7 +1,12 @@
 FROM ubuntu:19.10
 
+##########################
+### Preparation
+##########################
+
 RUN apt-get update && \
-    apt-get full-upgrade
+    apt-get full-upgrade && \
+    apt-get install -y apt-utils
 
 ###########################
 ### NVIDIA
@@ -63,7 +68,7 @@ RUN apt-get update && \
 ### My libraries
 ##########################
 
-RUN apt-get update && apt-get install python3-pip
+RUN apt-get update && apt-get install -y python3-pip
 
 RUN pip install numpy \
     pandas \
