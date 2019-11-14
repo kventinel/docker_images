@@ -63,6 +63,8 @@ RUN apt-get update && \
 ### My libraries
 ##########################
 
+RUN apt-get update && apt-get install python3-pip
+
 RUN pip install numpy \
     pandas \
     tqdm \
