@@ -82,4 +82,4 @@ RUN pip3 install --no-cache-dir torch \
 
 RUN pip3 install nltk \
     ipython \
-    jupiter
+    jupyter
