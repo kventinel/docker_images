@@ -77,8 +77,9 @@ RUN pip3 install numpy \
     scikit-learn \
     tensorflow-gpu
 
-RUN pip3 install torch \
-    torchvision \
-    nltk \
+RUN pip3 install --no-cache-dir torch \
+    torchvision
+
+RUN pip3 install nltk \
     ipython \
     jupiter
