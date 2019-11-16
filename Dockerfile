@@ -21,16 +21,20 @@ RUN apt-get update && \
     apt-get purge --autoremove -y curl && \
     rm -rf /var/lib/apt/lists/*
 
-ENV CUDA_VERSION 10.1.243
+ENV CUDA_VERSION 10.0.130
 
-ENV CUDA_PKG_VERSION 10-1=$CUDA_VERSION-1
+ENV CUDA_PART_VERSION 10.0
+
+ENV CUDA_DASH_VERSION 10-0
+
+ENV CUDA_PKG_VERSION $CUDA_DASH_VERSION=$CUDA_VERSION-1
 
 # For libraries in the cuda-compat-* package: https://docs.nvidia.com/cuda/eula/index.html#attachment-a
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     cuda-cudart-$CUDA_PKG_VERSION \
-    cuda-compat-10-1 && \
-    ln -s cuda-10.1 /usr/local/cuda && \
+    cuda-compat-$CUDA_DASH_VERSION && \
+    ln -s cuda-$CUDA_PART_VERSION /usr/local/cuda && \
     rm -rf /var/lib/apt/lists/*
 
 # Required for nvidia-docker v1
@@ -51,7 +55,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     cuda-libraries-$CUDA_PKG_VERSION \
     cuda-nvtx-$CUDA_PKG_VERSION \
-    libnccl2=$NCCL_VERSION-1+cuda10.1 && \
+    libnccl2=$NCCL_VERSION-1+cuda$CUDA_PART_VERSION && \
     apt-mark hold libnccl2 && \
     rm -rf /var/lib/apt/lists/*
 
@@ -59,7 +63,7 @@ ENV CUDNN_VERSION 7.6.4.38
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    libcudnn7=$CUDNN_VERSION-1+cuda10.1 \
+    libcudnn7=$CUDNN_VERSION-1+cuda$CUDA_PART_VERSION \
     && \
     apt-mark hold libcudnn7 && \
     rm -rf /var/lib/apt/lists/*
