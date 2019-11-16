@@ -65,23 +65,34 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 ###########################
-### My libraries
+### Python libraries
 ##########################
 
 RUN apt-get update && apt-get install -y python3-pip
 
 RUN pip3 install --upgrade pip
 
-RUN pip3 install numpy \
+RUN pip3 install
+    numpy \
     pandas \
     tqdm \
     scipy \
     scikit-learn \
     tensorflow-gpu
 
-RUN pip3 install --no-cache-dir torch \
+RUN pip3 install --no-cache-dir
+    torch \
     torchvision
 
-RUN pip3 install nltk \
+RUN pip3 install
+    nltk \
     ipython \
     jupyter
+
+############################
+### OS course
+############################
+
+RUN apt-get update && apt-get install \
+    gdb \
+    qemu
