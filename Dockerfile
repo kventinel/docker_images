@@ -68,7 +68,7 @@ RUN apt-get update && \
 ### Some useful packages
 ##########################
 
-RUN spt-get update && apt-get install -y tmux
+RUN apt-get update && apt-get install -y tmux
 
 ###########################
 ### Python libraries
