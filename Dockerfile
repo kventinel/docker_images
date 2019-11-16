@@ -90,8 +90,7 @@ RUN pip3 install \
     tqdm \
     scipy \
     scikit-learn \
-    tensorflow-gpu \
-    keras
+    tensorflow-gpu
 
 RUN pip3 install --no-cache-dir \
     torch \
