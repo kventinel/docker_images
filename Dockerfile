@@ -80,11 +80,11 @@ RUN pip3 install \
     scikit-learn \
     tensorflow-gpu
 
-RUN pip3 install --no-cache-dir
+RUN pip3 install --no-cache-dir \
     torch \
     torchvision
 
-RUN pip3 install
+RUN pip3 install \
     nltk \
     ipython \
     jupyter
