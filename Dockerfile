@@ -69,7 +69,7 @@ RUN apt-get update && \
 ##########################
 
 RUN apt-get update && apt-get install -y \
-    tmux
+    tmux \
     wget
 
 ###########################
@@ -86,7 +86,8 @@ RUN pip3 install \
     tqdm \
     scipy \
     scikit-learn \
-    tensorflow-gpu
+    tensorflow-gpu \
+    keras
 
 RUN pip3 install --no-cache-dir \
     torch \
