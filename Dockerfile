@@ -64,6 +64,12 @@ RUN apt-get update && \
     apt-mark hold libcudnn7 && \
     rm -rf /var/lib/apt/lists/*
 
+##########################
+### Some useful packages
+##########################
+
+RUN spt-get update && apt-get install -y tmux
+
 ###########################
 ### Python libraries
 ##########################
@@ -93,6 +99,6 @@ RUN pip3 install \
 ### OS course
 ############################
 
-RUN apt-get update && apt-get install \
+RUN apt-get update && apt-get install -y \
     gdb \
     qemu
