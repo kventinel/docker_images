@@ -93,7 +93,8 @@ RUN pip3 install --no-cache-dir \
 RUN pip3 install \
     nltk \
     ipython \
-    jupyter
+    jupyter \
+    matplotlib
 
 ############################
 ### OS course
