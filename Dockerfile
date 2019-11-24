@@ -110,4 +110,5 @@ RUN pip3 install \
 
 RUN apt-get update && apt-get install -y \
     gdb \
-    qemu
+    qemu \
+    qemu-system
