@@ -102,7 +102,9 @@ RUN pip3 install \
     nltk \
     ipython \
     jupyter \
-    matplotlib
+    matplotlib \
+    Pillow \
+    librosa
 
 ############################
 ### OS course
