@@ -92,6 +92,7 @@ RUN pip3 install \
     tqdm \
     scipy \
     scikit-learn \
+    scikit-image \
     tensorflow-gpu
 
 RUN pip3 install --no-cache-dir \
