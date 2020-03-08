@@ -5,7 +5,7 @@ FROM ubuntu:19.10
 ##########################
 
 RUN apt-get update && \
-    apt-get full-upgrade && \
+    apt-get full-upgrade -y && \
     apt-get install -y apt-utils
 
 ###########################
