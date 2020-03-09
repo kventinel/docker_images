@@ -21,11 +21,11 @@ RUN apt-get update && \
     apt-get purge --autoremove -y curl && \
     rm -rf /var/lib/apt/lists/*
 
-ENV CUDA_VERSION 10.0.130
+ENV CUDA_VERSION 10.1.243
 
-ENV CUDA_PART_VERSION 10.0
+ENV CUDA_PART_VERSION 10.1
 
-ENV CUDA_DASH_VERSION 10-0
+ENV CUDA_DASH_VERSION 10-1
 
 ENV CUDA_PKG_VERSION $CUDA_DASH_VERSION=$CUDA_VERSION-1
 
@@ -47,7 +47,7 @@ ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64
 # nvidia-container-runtime
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
-ENV NVIDIA_REQUIRE_CUDA "cuda>=10.0 brand=tesla,driver>=384,driver<385 brand=tesla,driver>=410,driver<411"
+ENV NVIDIA_REQUIRE_CUDA "cuda>=10.1 brand=tesla,driver>=384,driver<385 brand=tesla,driver>=396,driver<397 brand=tesla,driver>=410,driver<411"
 
 ENV NCCL_VERSION 2.4.8
 
@@ -55,11 +55,12 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     cuda-libraries-$CUDA_PKG_VERSION \
     cuda-nvtx-$CUDA_PKG_VERSION \
+    libcublas10=10.2.1.243-1 \
     libnccl2=$NCCL_VERSION-1+cuda$CUDA_PART_VERSION && \
     apt-mark hold libnccl2 && \
     rm -rf /var/lib/apt/lists/*
 
-ENV CUDNN_VERSION 7.6.4.38
+ENV CUDNN_VERSION 7.6.5.32
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
