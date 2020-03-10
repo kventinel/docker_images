@@ -70,14 +70,56 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 ##########################
+### Install PyTorch
+#########################
+
+ARG PYTHON_VERSION=3.7
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    cmake \
+    git \
+    curl \
+    ca-certificates \
+    libjpeg-dev \
+    libpng-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  && \
+    chmod +x ~/miniconda.sh && \
+    ~/miniconda.sh -b -p /opt/conda && \
+    rm ~/miniconda.sh && \
+    /opt/conda/bin/conda install -y python=$PYTHON_VERSION numpy pyyaml scipy ipython mkl mkl-include ninja cython typing && \
+    /opt/conda/bin/conda install -y -c pytorch magma-cuda101 && \
+    /opt/conda/bin/conda clean -ya
+
+ENV PATH /opt/conda/bin:$PATH
+
+WORKDIR /opt/pytorch
+
+COPY . .
+
+RUN git submodule update --init --recursive
+
+RUN TORCH_CUDA_ARCH_LIST="3.5 5.2 6.0 6.1 7.0+PTX" TORCH_NVCC_FLAGS="-Xfatbin -compress-all" \
+    CMAKE_PREFIX_PATH="$(dirname $(which conda))/../" \
+    pip install -v .
+
+RUN git clone https://github.com/pytorch/vision.git && cd vision && pip install -v .
+
+WORKDIR /workspace
+
+RUN chmod -R a+w .
+
+##########################
 ### Some useful packages
 ##########################
 
 RUN apt-get update && apt-get install -y \
     gcc-multilib \
     tmux \
-    wget \
-    git
+    wget
 
 ###########################
 ### Python libraries
@@ -88,21 +130,14 @@ RUN apt-get update && apt-get install -y python3-pip
 RUN pip3 install --upgrade pip
 
 RUN pip3 install \
-    numpy \
     pandas \
     tqdm \
-    scipy \
     scikit-learn \
     scikit-image \
     tensorflow-gpu
 
-RUN pip3 install --no-cache-dir \
-    torch \
-    torchvision
-
 RUN pip3 install \
     nltk \
-    ipython \
     jupyter \
     matplotlib \
     Pillow \
