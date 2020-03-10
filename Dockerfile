@@ -69,6 +69,14 @@ RUN apt-get update && \
     apt-mark hold libcudnn7 && \
     rm -rf /var/lib/apt/lists/*
 
+#########################
+### Install Pip
+#########################
+
+RUN apt-get update && apt-get install -y python3-pip
+
+RUN pip3 install --upgrade pip
+
 ##########################
 ### Install PyTorch
 #########################
@@ -119,35 +127,23 @@ RUN chmod -R a+w .
 RUN apt-get update && apt-get install -y \
     gcc-multilib \
     tmux \
-    wget
+    wget \
+    gdb \
+    qemu \
+    qemu-system
 
 ###########################
 ### Python libraries
 ##########################
-
-RUN apt-get update && apt-get install -y python3-pip
-
-RUN pip3 install --upgrade pip
 
 RUN pip3 install \
     pandas \
     tqdm \
     scikit-learn \
     scikit-image \
-    tensorflow-gpu
-
-RUN pip3 install \
+    tensorflow-gpu \
     nltk \
     jupyter \
     matplotlib \
     Pillow \
     librosa
-
-############################
-### OS course
-############################
-
-RUN apt-get update && apt-get install -y \
-    gdb \
-    qemu \
-    qemu-system
