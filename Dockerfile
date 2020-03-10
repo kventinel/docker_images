@@ -10,6 +10,9 @@ RUN apt-get update && \
 
 ###########################
 ### NVIDIA
+### From https://gitlab.com/nvidia/container-images/cuda/-/blob/master/dist/ubuntu18.04/10.1/base/Dockerfile
+### From https://gitlab.com/nvidia/container-images/cuda/-/blob/master/dist/ubuntu18.04/10.1/runtime/Dockerfile
+### From https://gitlab.com/nvidia/container-images/cuda/-/blob/master/dist/ubuntu18.04/10.1/runtime/cudnn7/Dockerfile
 ###########################
 
 RUN apt-get update && \
@@ -79,6 +82,7 @@ RUN pip3 install --upgrade pip
 
 ##########################
 ### Install PyTorch
+### From https://github.com/pytorch/pytorch/blob/master/docker/pytorch/Dockerfile
 #########################
 
 ARG PYTHON_VERSION=3.7
