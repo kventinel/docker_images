@@ -82,7 +82,6 @@ RUN pip3 install --upgrade pip
 
 ##########################
 ### Install PyTorch
-### From https://github.com/pytorch/pytorch/blob/master/docker/pytorch/Dockerfile
 #########################
 
 ARG PYTHON_VERSION=3.7
@@ -108,21 +107,16 @@ RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-la
 
 ENV PATH /opt/conda/bin:$PATH
 
-WORKDIR /opt/pytorch
+RUN git clone https://github.com/pytorch/pytorch.git && \
+    cd pytorch && \
+    git checkout tags/v1.4.0 && \
+    export TORCH_CUDA_ARCH_LIST="3.5;3.7;5.0+PTX;6.0;6.1;7.0;7.5" \
+    TORCH_NVCC_FLAGS="-Xfatbin -compress-all" \
+    python setup.py install && \
+    cd .. && \
+    rm -rf pytorch
 
-COPY . .
-
-RUN git submodule update --init --recursive
-
-RUN TORCH_CUDA_ARCH_LIST="3.5 5.2 6.0 6.1 7.0+PTX" TORCH_NVCC_FLAGS="-Xfatbin -compress-all" \
-    CMAKE_PREFIX_PATH="$(dirname $(which conda))/../" \
-    pip install -v .
-
-RUN git clone https://github.com/pytorch/vision.git && cd vision && pip install -v .
-
-WORKDIR /workspace
-
-RUN chmod -R a+w .
+RUN pip3 install torchvision
 
 ##########################
 ### Some useful packages
