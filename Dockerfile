@@ -110,6 +110,7 @@ ENV PATH /opt/conda/bin:$PATH
 RUN git clone https://github.com/pytorch/pytorch.git && \
     cd pytorch && \
     git checkout tags/v1.4.0 && \
+    git submodule update --init --recursive && \
     TORCH_CUDA_ARCH_LIST="3.5;3.7;5.0+PTX;6.0;6.1;7.0;7.5" \
     TORCH_NVCC_FLAGS="-Xfatbin -compress-all" \
     python setup.py install && \
