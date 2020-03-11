@@ -6,7 +6,7 @@ FROM ubuntu:19.10
 
 RUN apt-get update && \
     apt-get full-upgrade -y && \
-    apt-get install -y dialog apt-utils
+    apt-get install -y apt-utils
 
 ###########################
 ### NVIDIA
@@ -25,11 +25,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 ENV CUDA_VERSION 10.1.243
-
 ENV CUDA_PART_VERSION 10.1
-
 ENV CUDA_DASH_VERSION 10-1
-
 ENV CUDA_PKG_VERSION $CUDA_DASH_VERSION=$CUDA_VERSION-1
 
 # For libraries in the cuda-compat-* package: https://docs.nvidia.com/cuda/eula/index.html#attachment-a
@@ -45,7 +42,7 @@ RUN echo "/usr/local/nvidia/lib" >> /etc/ld.so.conf.d/nvidia.conf && \
     echo "/usr/local/nvidia/lib64" >> /etc/ld.so.conf.d/nvidia.conf
 
 ENV PATH /usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
-ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64
+ENV LD_LIBRARY_PATH /usr/local/cuda/lib64:/usr/local/nvidia/lib:/usr/local/nvidia/lib64
 
 # nvidia-container-runtime
 ENV NVIDIA_VISIBLE_DEVICES all
@@ -63,11 +60,24 @@ RUN apt-get update && \
     apt-mark hold libnccl2 && \
     rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    cuda-nvml-dev-$CUDA_PKG_VERSION \
+    cuda-command-line-tools-$CUDA_PKG_VERSION \
+    cuda-libraries-dev-$CUDA_PKG_VERSION \
+    cuda-minimal-build-$CUDA_PKG_VERSION \
+    libnccl-dev=$NCCL_VERSION-1+cuda10.1 \
+    libcublas-dev=10.2.1.243-1 \
+    && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV LIBRARY_PATH /usr/local/cuda/lib64/stubs
+
 ENV CUDNN_VERSION 7.6.5.32
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     libcudnn7=$CUDNN_VERSION-1+cuda$CUDA_PART_VERSION \
+    libcudnn7-dev=$CUDNN_VERSION-1+cuda10.1 \
     && \
     apt-mark hold libcudnn7 && \
     rm -rf /var/lib/apt/lists/*
@@ -88,6 +98,7 @@ ARG PYTHON_VERSION=3.7
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+    g++-8 \
     build-essential \
     cmake \
     git \
@@ -95,18 +106,20 @@ RUN apt-get update && \
     ca-certificates \
     libjpeg-dev \
     libpng-dev && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    rm /usr/bin/gcc /usr/bin/g++ && \
+    ln -s /usr/bin/g++-8 /usr/bin/g++ && \
+    ln -s /usr/bin/gcc-8 /usr/bin/gcc
 
 RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  && \
     chmod +x ~/miniconda.sh && \
     ~/miniconda.sh -b -p /opt/conda && \
     rm ~/miniconda.sh && \
-    /opt/conda/bin/conda install -y python=$PYTHON_VERSION numpy pyyaml scipy ipython mkl mkl-include ninja cython typing setuptools cffi && \
+    /opt/conda/bin/conda install -y python=$PYTHON_VERSION cmake numpy pyyaml scipy ipython mkl mkl-include ninja cython typing setuptools cffi && \
     /opt/conda/bin/conda install -y -c pytorch magma-cuda101 && \
     /opt/conda/bin/conda clean -ya
 
 ENV PATH /opt/conda/bin:$PATH
-
 ENV CMAKE_PREFIX_PATH ${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
 
 RUN git clone https://github.com/pytorch/pytorch.git && \
@@ -114,8 +127,16 @@ RUN git clone https://github.com/pytorch/pytorch.git && \
     git checkout tags/v1.4.0 && \
     git submodule sync && \
     git submodule update --init --recursive && \
+    USE_CUDA=1 \
+    USE_CUDNN=1 \
+    USE_MKLDNN=1 \
+    CUDA_HOME="/usr/local/cuda" \
+    CUDA_TOOLKIT_ROOT_DIR="/usr/local/cuda" \
     TORCH_CUDA_ARCH_LIST="3.5;3.7;5.0+PTX;6.0;6.1;7.0;7.5" \
     TORCH_NVCC_FLAGS="-Xfatbin -compress-all" \
+    CUDA_INCLUDE_DIRS="usr/include/cuda" \
+    CUDA_CUDART_LIBRARY="/usr/local/cuda/lib64/libcudart.so" \
+    CUDA_NVCC_EXECUTABLE="/usr/local/cuda/bin/nvcc" \
     python setup.py install && \
     cd .. && \
     rm -rf pytorch
