@@ -82,14 +82,6 @@ RUN apt-get update && \
     apt-mark hold libcudnn7 && \
     rm -rf /var/lib/apt/lists/*
 
-#########################
-### Install Pip
-#########################
-
-RUN apt-get update && apt-get install -y python3-pip
-
-RUN pip3 install --upgrade pip
-
 ##########################
 ### Install PyTorch
 #########################
@@ -106,10 +98,7 @@ RUN apt-get update && \
     ca-certificates \
     libjpeg-dev \
     libpng-dev && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm /usr/bin/gcc /usr/bin/g++ && \
-    ln -s /usr/bin/g++-8 /usr/bin/g++ && \
-    ln -s /usr/bin/gcc-8 /usr/bin/gcc
+    rm -rf /var/lib/apt/lists/*
 
 RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  && \
     chmod +x ~/miniconda.sh && \
@@ -137,11 +126,19 @@ RUN git clone https://github.com/pytorch/pytorch.git && \
     CUDA_INCLUDE_DIRS="usr/include/cuda" \
     CUDA_CUDART_LIBRARY="/usr/local/cuda/lib64/libcudart.so" \
     CUDA_NVCC_EXECUTABLE="/usr/local/cuda/bin/nvcc" \
+    CC="/usr/bin/gcc-8" \
+    CXX="/usr/bin/g++-8" \
     python setup.py install && \
     cd .. && \
     rm -rf pytorch
 
-RUN pip3 install torchvision
+RUN git clone https://github.com/pytorch/vision.git && \
+    cd vision && \
+    CC="/usr/bin/g++-8" \
+    CXX="/usr/bin/gcc-8" \
+    python setup.py install && \
+    cd .. && \
+    rm -rf vision
 
 ##########################
 ### Some useful packages
@@ -155,11 +152,17 @@ RUN apt-get update && apt-get install -y \
     qemu \
     qemu-system
 
+#########################
+### Install Pip
+#########################
+
+RUN conda install -y pip
+
 ###########################
 ### Python libraries
 ##########################
 
-RUN pip3 install \
+RUN pip install \
     pandas \
     tqdm \
     scikit-learn \
