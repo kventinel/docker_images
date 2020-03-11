@@ -101,15 +101,18 @@ RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-la
     chmod +x ~/miniconda.sh && \
     ~/miniconda.sh -b -p /opt/conda && \
     rm ~/miniconda.sh && \
-    /opt/conda/bin/conda install -y python=$PYTHON_VERSION numpy pyyaml scipy ipython mkl mkl-include ninja cython typing && \
+    /opt/conda/bin/conda install -y python=$PYTHON_VERSION numpy pyyaml scipy ipython mkl mkl-include ninja cython typing setuptools cffi && \
     /opt/conda/bin/conda install -y -c pytorch magma-cuda101 && \
     /opt/conda/bin/conda clean -ya
 
 ENV PATH /opt/conda/bin:$PATH
 
+ENV CMAKE_PREFIX_PATH ${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
+
 RUN git clone https://github.com/pytorch/pytorch.git && \
     cd pytorch && \
     git checkout tags/v1.4.0 && \
+    git submodule sync && \
     git submodule update --init --recursive && \
     TORCH_CUDA_ARCH_LIST="3.5;3.7;5.0+PTX;6.0;6.1;7.0;7.5" \
     TORCH_NVCC_FLAGS="-Xfatbin -compress-all" \
