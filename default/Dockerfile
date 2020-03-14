@@ -134,6 +134,7 @@ RUN git clone https://github.com/pytorch/pytorch.git && \
 
 RUN git clone https://github.com/pytorch/vision.git && \
     cd vision && \
+    git checkout tags/v0.5.0 && \
     CC="/usr/bin/g++-8" \
     CXX="/usr/bin/gcc-8" \
     python setup.py install && \
