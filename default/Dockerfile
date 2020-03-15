@@ -151,7 +151,8 @@ RUN apt-get update && apt-get install -y \
     wget \
     gdb \
     qemu \
-    qemu-system
+    qemu-system \
+    time
 
 #########################
 ### Install Pip
