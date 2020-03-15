@@ -173,4 +173,5 @@ RUN pip install \
     jupyter \
     matplotlib \
     Pillow \
-    librosa
+    librosa \
+    click
