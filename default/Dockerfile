@@ -1,4 +1,5 @@
-FROM ubuntu:19.10
+FROM ubuntu:20.04
+ARG DEBIAN_FRONTEND=noninteractive
 
 ##########################
 ### Preparation
@@ -22,7 +23,8 @@ RUN apt-get update && \
     echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/cuda.list && \
     echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list && \
     apt-get purge --autoremove -y curl && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean
 
 ENV CUDA_VERSION 10.1.243
 ENV CUDA_PART_VERSION 10.1
@@ -35,7 +37,8 @@ RUN apt-get update && \
     cuda-cudart-$CUDA_PKG_VERSION \
     cuda-compat-$CUDA_DASH_VERSION && \
     ln -s cuda-$CUDA_PART_VERSION /usr/local/cuda && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean
 
 # Required for nvidia-docker v1
 RUN echo "/usr/local/nvidia/lib" >> /etc/ld.so.conf.d/nvidia.conf && \
@@ -47,7 +50,7 @@ ENV LD_LIBRARY_PATH /usr/local/cuda/lib64:/usr/local/nvidia/lib:/usr/local/nvidi
 # nvidia-container-runtime
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
-ENV NVIDIA_REQUIRE_CUDA "cuda>=10.1 brand=tesla,driver>=384,driver<385 brand=tesla,driver>=396,driver<397 brand=tesla,driver>=410,driver<411"
+ENV NVIDIA_REQUIRE_CUDA "cuda>=10.1 brand=tesla,driver>=384,driver<385 brand=tesla,driver>=396,driver<397 brand=tesla,driver>=410,driver<411 brand=tesla,driver>=418,driver<419"
 
 ENV NCCL_VERSION 2.4.8
 
@@ -58,7 +61,8 @@ RUN apt-get update && \
     libcublas10=10.2.1.243-1 \
     libnccl2=$NCCL_VERSION-1+cuda$CUDA_PART_VERSION && \
     apt-mark hold libnccl2 && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     cuda-nvml-dev-$CUDA_PKG_VERSION \
@@ -66,9 +70,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     cuda-libraries-dev-$CUDA_PKG_VERSION \
     cuda-minimal-build-$CUDA_PKG_VERSION \
     libnccl-dev=$NCCL_VERSION-1+cuda10.1 \
-    libcublas-dev=10.2.1.243-1 \
-    && \
-    rm -rf /var/lib/apt/lists/*
+    libcublas-dev=10.2.1.243-1 && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean
 
 ENV LIBRARY_PATH /usr/local/cuda/lib64/stubs
 
@@ -80,7 +84,8 @@ RUN apt-get update && \
     libcudnn7-dev=$CUDNN_VERSION-1+cuda10.1 \
     && \
     apt-mark hold libcudnn7 && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean
 
 ##########################
 ### Install PyTorch
@@ -100,7 +105,7 @@ RUN apt-get update && \
     libpng-dev && \
     rm -rf /var/lib/apt/lists/*
 
-RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  && \
+RUN curl -L -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  && \
     chmod +x ~/miniconda.sh && \
     ~/miniconda.sh -b -p /opt/conda && \
     rm ~/miniconda.sh && \
@@ -113,7 +118,7 @@ ENV CMAKE_PREFIX_PATH ${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
 
 RUN git clone https://github.com/pytorch/pytorch.git && \
     cd pytorch && \
-    git checkout tags/v1.4.0 && \
+    git checkout tags/v1.5.0 && \
     git submodule sync && \
     git submodule update --init --recursive && \
     USE_CUDA=1 \
@@ -134,9 +139,9 @@ RUN git clone https://github.com/pytorch/pytorch.git && \
 
 RUN git clone https://github.com/pytorch/vision.git && \
     cd vision && \
-    git checkout tags/v0.5.0 && \
-    CC="/usr/bin/g++-8" \
-    CXX="/usr/bin/gcc-8" \
+    git checkout tags/v0.6.0 && \
+    CC="/usr/bin/gcc-8" \
+    CXX="/usr/bin/g++-8" \
     python setup.py install && \
     cd .. && \
     rm -rf vision
