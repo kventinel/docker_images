@@ -182,4 +182,5 @@ RUN pip install \
     matplotlib \
     Pillow \
     librosa \
-    click
+    click \
+    pycocotools
