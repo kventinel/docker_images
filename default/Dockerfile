@@ -172,6 +172,9 @@ RUN conda install -y pip
 ##########################
 
 RUN pip install \
+    pandas
+
+RUN pip install \
     pandas \
     tqdm \
     scikit-learn \
@@ -184,3 +187,5 @@ RUN pip install \
     librosa \
     click \
     pycocotools
+
+RUN pip install subword-nmt
