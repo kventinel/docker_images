@@ -172,9 +172,6 @@ RUN conda install -y pip
 ##########################
 
 RUN pip install \
-    pandas
-
-RUN pip install \
     pandas \
     tqdm \
     scikit-learn \
