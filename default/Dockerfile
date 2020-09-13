@@ -118,7 +118,7 @@ ENV CMAKE_PREFIX_PATH ${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
 
 RUN git clone https://github.com/pytorch/pytorch.git && \
     cd pytorch && \
-    git checkout tags/v1.5.0 && \
+    git checkout tags/v1.6.0 && \
     git submodule sync && \
     git submodule update --init --recursive && \
     USE_CUDA=1 \
@@ -139,7 +139,7 @@ RUN git clone https://github.com/pytorch/pytorch.git && \
 
 RUN git clone https://github.com/pytorch/vision.git && \
     cd vision && \
-    git checkout tags/v0.6.0 && \
+    git checkout tags/v0.7.0 && \
     CC="/usr/bin/gcc-8" \
     CXX="/usr/bin/g++-8" \
     python setup.py install && \
