@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:20.10
 ARG DEBIAN_FRONTEND=noninteractive
 
 ##########################
@@ -91,7 +91,7 @@ RUN apt-get update && \
 ### Install PyTorch
 #########################
 
-ARG PYTHON_VERSION=3.7
+ARG PYTHON_VERSION=3.9
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
