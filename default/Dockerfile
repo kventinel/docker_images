@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:20.10
 ARG DEBIAN_FRONTEND=noninteractive
 
 ##########################
@@ -91,7 +91,7 @@ RUN apt-get update && \
 ### Install PyTorch
 #########################
 
-ARG PYTHON_VERSION=3.7
+ARG PYTHON_VERSION=3.8
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -109,7 +109,7 @@ RUN curl -L -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3
     chmod +x ~/miniconda.sh && \
     ~/miniconda.sh -b -p /opt/conda && \
     rm ~/miniconda.sh && \
-    /opt/conda/bin/conda install -y python=$PYTHON_VERSION cmake numpy pyyaml scipy ipython mkl mkl-include ninja cython typing setuptools cffi && \
+    /opt/conda/bin/conda install -y python=$PYTHON_VERSION cmake numpy=1.18 pyyaml scipy ipython mkl mkl-include ninja cython typing setuptools cffi && \
     /opt/conda/bin/conda install -y -c pytorch magma-cuda101 && \
     /opt/conda/bin/conda clean -ya
 
