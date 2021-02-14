@@ -1,0 +1,6 @@
+# Python trash
+__pycache__
+.ipynb_checkpoints
+
+# Vim
+*.swp
