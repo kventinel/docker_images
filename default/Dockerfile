@@ -25,6 +25,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3.9 39 && \
+    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 39 && \
     /bin/bash -c 'for filename in /usr/bin/llvm-*; do update-alternatives --install ${filename:: -3} ${filename:9: -3} ${filename} 10; done'
 
 ###########################
@@ -74,7 +75,8 @@ RUN curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py && \
         scikit-learn \
         jupyter \
         matplotlib \
-        librosa && \
+        librosa \
+        tensorboard && \
     pip install -f https://download.pytorch.org/whl/torch_stable.html \
         torch==1.7.1+cu110 \
         torchvision==0.8.2+cu110 \
