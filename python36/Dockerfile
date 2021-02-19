@@ -1,9 +1,9 @@
 FROM ubuntu:20.10
 ARG DEBIAN_FRONTEND=noninteractive
 
-##########################
+###########################
 ### Install apt packages
-##########################
+###########################
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends apt-utils && \
@@ -25,6 +25,10 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean && \
     /bin/bash -c 'for filename in /usr/bin/llvm-*; do update-alternatives --install ${filename:: -3} ${filename:9: -3} ${filename} 10; done'
+
+###########################
+### Install python3.6
+###########################
 
 RUN mkdir python36 && \
     cd python36 && \
@@ -75,7 +79,7 @@ ENV NVIDIA_REQUIRE_CUDA "cuda>=11.0 brand=tesla,driver>=418,driver<419 brand=tes
 
 ###########################
 ### Python libraries
-##########################
+###########################
 
 RUN pip install --upgrade pip && \
     pip install numpy && \
