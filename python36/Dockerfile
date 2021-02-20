@@ -21,10 +21,18 @@ RUN apt-get update && \
         make \
         g++ \
         zlib1g-dev \
-        libssl-dev && \
+        libssl-dev \
+        git \
+        vim \
+        locales \
+        cmake \
+        htop && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean && \
-    /bin/bash -c 'for filename in /usr/bin/llvm-*; do update-alternatives --install ${filename:: -3} ${filename:9: -3} ${filename} 10; done'
+    /bin/bash -c 'for filename in /usr/bin/llvm-*; do update-alternatives --install ${filename:: -3} ${filename:9: -3} ${filename} 10; done' && \
+    locale-gen en_US.UTF-8
+
+ENV LANG en_US.UTF-8
 
 ###########################
 ### Install python3.6
@@ -35,7 +43,7 @@ RUN mkdir python36 && \
     curl https://www.python.org/ftp/python/3.6.13/Python-3.6.13.tgz --output python36.tar.gz && \
     tar -xvf python36.tar.gz && \
     cd Python-3.6.13 && \
-    ./configure --prefix=/usr && \
+    ./configure --prefix=/usr --enable-shared && \
     make && \
     make install && \
     cd ../../ && \
@@ -97,3 +105,31 @@ RUN pip install --upgrade pip && \
         torchvision==0.8.2+cu110 \
         torchaudio===0.7.2 && \
     pip cache purge
+
+###########################
+### Make User
+###########################
+
+RUN useradd -ms /bin/bash lollypop
+USER lollypop
+WORKDIR /home/lollypop
+
+###########################
+### Set user profile
+###########################
+
+RUN git clone https://github.com/kventinel/configs.git && \
+    cp configs/tmux.conf .tmux.conf && \
+    cp configs/vimrc .vimrc && \
+    cat configs/bashrc >> .bashrc && \
+    rm -r configs && \
+    mkdir -p .vim/pack/vendor/start && \
+    git clone https://github.com/morhetz/gruvbox.git .vim/pack/vendor/start/gruvbox && \
+    git clone https://github.com/ycm-core/YouCompleteMe.git .vim/pack/vendor/start/YouCompleteMe && \
+    git clone https://github.com/itchyny/vim-cursorword.git .vim/pack/vendor/start/vim-cursorword && \
+    git clone https://github.com/vim-syntastic/syntastic.git .vim/pack/vendor/start/syntastic && \
+    git clone https://github.com/preservim/nerdcommenter.git .vim/pack/vendor/start/nerdcommenter && \
+    cd .vim/pack/vendor/start/YouCompleteMe && \
+    git submodule update --init --recursive && \
+    ./install.py && \
+    cd ~/
