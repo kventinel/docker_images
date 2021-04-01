@@ -27,7 +27,10 @@ RUN apt-get update && \
         locales \
         cmake \
         htop \
-        libsndfile1 && \
+        libsndfile1 \
+        libbz2-dev \
+        liblzma-dev \
+        libsqlite3-dev && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean && \
     /bin/bash -c 'for filename in /usr/bin/llvm-*; do update-alternatives --install ${filename:: -3} ${filename:9: -3} ${filename} 10; done' && \
