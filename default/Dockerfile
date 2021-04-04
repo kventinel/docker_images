@@ -32,7 +32,10 @@ RUN apt-get update && \
     apt-get clean && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3.9 39 && \
     update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 39 && \
-    /bin/bash -c 'for filename in /usr/bin/llvm-*; do update-alternatives --install ${filename:: -3} ${filename:9: -3} ${filename} 10; done'
+    /bin/bash -c 'for filename in /usr/bin/llvm-*; do update-alternatives --install ${filename:: -3} ${filename:9: -3} ${filename} 10; done' && \
+    locale-gen en_US.UTF-8
+
+ENV LANG en_US.UTF-8
 
 ###########################
 ### NVIDIA
