@@ -26,7 +26,8 @@ RUN apt-get update && \
         vim \
         locales \
         cmake \
-        htop && \
+        htop \
+        libsndfile1 && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3.9 39 && \
