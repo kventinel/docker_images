@@ -21,7 +21,12 @@ RUN apt-get update && \
         llvm-10 \
         llvm-10-dev \
         make \
-        g++ && \
+        g++ \
+        git \
+        vim \
+        locales \
+        cmake \
+        htop && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3.9 39 && \
@@ -37,14 +42,14 @@ RUN curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu20
     echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64 /" > /etc/apt/sources.list.d/cuda.list && \
     echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu2004/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list
 
-ENV CUDA_VERSION 11.0.3
+ENV CUDA_VERSION 11.1.1
 
 # For libraries in the cuda-compat-* package: https://docs.nvidia.com/cuda/eula/index.html#attachment-a
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    cuda-cudart-11-0=11.0.221-1 \
-    cuda-compat-11-0 && \
-    ln -s cuda-11.0 /usr/local/cuda && \
+    cuda-cudart-11-1=11.1.74-1 \
+    cuda-compat-11-1 && \
+    ln -s cuda-11.1 /usr/local/cuda && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
@@ -58,7 +63,7 @@ ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64
 # nvidia-container-runtime
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
-ENV NVIDIA_REQUIRE_CUDA "cuda>=11.0 brand=tesla,driver>=418,driver<419 brand=tesla,driver>=440,driver<441 brand=tesla,driver>=450,driver<451"
+ENV NVIDIA_REQUIRE_CUDA "cuda>=11.1 brand=tesla,driver>=418,driver<419 brand=tesla,driver>=440,driver<441 brand=tesla,driver>=450,driver<451"
 
 ###########################
 ### Python libraries
@@ -78,7 +83,35 @@ RUN curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py && \
         librosa \
         tensorboard && \
     pip install -f https://download.pytorch.org/whl/torch_stable.html \
-        torch==1.7.1+cu110 \
-        torchvision==0.8.2+cu110 \
-        torchaudio===0.7.2 && \
+        torch==1.8.1+cu111 \
+        torchvision==0.9.1+cu111 \
+        torchaudio===0.8.1 && \
     pip cache purge
+
+###########################
+### Make User
+###########################
+
+RUN useradd -ms /bin/bash lollypop
+USER lollypop
+WORKDIR /home/lollypop
+
+###########################
+### Set user profile
+###########################
+
+RUN git clone https://github.com/kventinel/configs.git && \
+    cp configs/tmux.conf .tmux.conf && \
+    cp configs/vimrc .vimrc && \
+    cat configs/bashrc >> .bashrc && \
+    rm -r configs && \
+    mkdir -p .vim/pack/vendor/start && \
+    git clone https://github.com/morhetz/gruvbox.git .vim/pack/vendor/start/gruvbox && \
+    git clone https://github.com/ycm-core/YouCompleteMe.git .vim/pack/vendor/start/YouCompleteMe && \
+    git clone https://github.com/itchyny/vim-cursorword.git .vim/pack/vendor/start/vim-cursorword && \
+    git clone https://github.com/vim-syntastic/syntastic.git .vim/pack/vendor/start/syntastic && \
+    git clone https://github.com/preservim/nerdcommenter.git .vim/pack/vendor/start/nerdcommenter && \
+    cd .vim/pack/vendor/start/YouCompleteMe && \
+    git submodule update --init --recursive && \
+    ./install.py && \
+    cd ~/
