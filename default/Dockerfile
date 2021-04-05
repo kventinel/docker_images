@@ -85,7 +85,11 @@ RUN curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py && \
         jupyter \
         matplotlib \
         librosa \
-        tensorboard && \
+        tensorboard \
+        hydra_core \
+        hydra_colorlog \ 
+        pysto \
+        pesq && \
     pip install -f https://download.pytorch.org/whl/torch_stable.html \
         torch==1.8.1+cu111 \
         torchvision==0.9.1+cu111 \
