@@ -1,9 +1,9 @@
 FROM ubuntu:20.10
 ARG DEBIAN_FRONTEND=noninteractive
 
-##########################
+###########################
 ### Install apt packages
-##########################
+###########################
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends apt-utils && \
@@ -27,7 +27,8 @@ RUN apt-get update && \
         locales \
         cmake \
         htop \
-        libsndfile1 && \
+        libsndfile1 \
+        sox && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3.9 39 && \
@@ -89,7 +90,8 @@ RUN curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py && \
         hydra_core \
         hydra_colorlog \ 
         pystoi \
-        pesq && \
+        pesq \
+        pylint && \
     pip install -f https://download.pytorch.org/whl/torch_stable.html \
         torch==1.8.1+cu111 \
         torchvision==0.9.1+cu111 \
