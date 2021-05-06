@@ -40,7 +40,7 @@ ENV LANG en_US.UTF-8
 
 ###########################
 ### NVIDIA
-### From https://gitlab.com/nvidia/container-images/cuda/-/blob/master/dist/11.0.3/ubuntu18.04-x86_64/base/Dockerfile
+### From https://gitlab.com/nvidia/container-images/cuda/-/blob/master/dist/11.1.1/ubuntu18.04-x86_64/base/Dockerfile
 ###########################
 
 RUN curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub | apt-key add - && \
@@ -72,7 +72,7 @@ ENV NVIDIA_REQUIRE_CUDA "cuda>=11.1 brand=tesla,driver>=418,driver<419 brand=tes
 
 ###########################
 ### Python libraries
-##########################
+###########################
 
 RUN curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py && \
     python get-pip.py && \
@@ -96,7 +96,7 @@ RUN curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py && \
     pip install -f https://download.pytorch.org/whl/torch_stable.html \
         torch==1.8.1+cu111 \
         torchvision==0.9.1+cu111 \
-        torchaudio===0.8.1 && \
+        torchaudio==0.8.1 && \
     pip cache purge
 
 ###########################
