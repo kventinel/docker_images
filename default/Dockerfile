@@ -40,7 +40,7 @@ ENV LANG en_US.UTF-8
 
 ###########################
 ### NVIDIA
-### From https://gitlab.com/nvidia/container-images/cuda/-/blob/master/dist/11.1.1/ubuntu18.04-x86_64/base/Dockerfile
+### From https://gitlab.com/nvidia/container-images/cuda/-/blob/master/dist/11.1.1/ubuntu20.04-x86_64/base/Dockerfile
 ###########################
 
 RUN curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub | apt-key add - && \
