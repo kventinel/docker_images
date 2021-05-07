@@ -1,4 +1,4 @@
-FROM ubuntu:20.10
+FROM ubuntu:21.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 ###########################
@@ -16,8 +16,8 @@ RUN apt-get update && \
         wget \
         zip \
         unzip \
-        llvm-10 \
-        llvm-10-dev \
+        llvm-12 \
+        llvm-12-dev \
         make \
         g++ \
         zlib1g-dev \
@@ -30,7 +30,8 @@ RUN apt-get update && \
         libsndfile1 \
         libbz2-dev \
         liblzma-dev \
-        libsqlite3-dev && \
+        libsqlite3-dev \
+        sox && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean && \
     /bin/bash -c 'for filename in /usr/bin/llvm-*; do update-alternatives --install ${filename:: -3} ${filename:9: -3} ${filename} 10; done' && \
@@ -59,7 +60,7 @@ RUN mkdir python36 && \
 
 ###########################
 ### NVIDIA
-### From https://gitlab.com/nvidia/container-images/cuda/-/blob/master/dist/11.0.3/ubuntu18.04-x86_64/base/Dockerfile
+### From https://gitlab.com/nvidia/container-images/cuda/-/blob/master/dist/11.1.1/ubuntu18.04-x86_64/base/Dockerfile
 ###########################
 
 RUN curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub | apt-key add - && \
@@ -105,12 +106,15 @@ RUN pip install --upgrade pip && \
         librosa \
         tensorboard \
         hydra_core \
-        hydra_colorlog \ 
-        pystoi && \
+        hydra_colorlog \
+        pystoi \
+        pesq \
+        pylint \
+        einops && \
     pip install -f https://download.pytorch.org/whl/torch_stable.html \
         torch==1.8.1+cu111 \
         torchvision==0.9.1+cu111 \
-        torchaudio===0.8.1 && \
+        torchaudio==0.8.1 && \
     pip cache purge
 
 ###########################
