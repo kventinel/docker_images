@@ -1,4 +1,4 @@
-FROM ubuntu:20.10
+FROM ubuntu:21.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 ###########################
@@ -18,8 +18,8 @@ RUN apt-get update && \
         wget \
         zip \
         unzip \
-        llvm-10 \
-        llvm-10-dev \
+        llvm-12 \
+        llvm-12-dev \
         make \
         g++ \
         git \
