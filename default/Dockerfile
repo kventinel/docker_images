@@ -88,7 +88,7 @@ RUN curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py && \
         librosa \
         tensorboard \
         hydra_core \
-        hydra_colorlog \ 
+        hydra_colorlog \
         pystoi \
         pesq \
         pylint \
