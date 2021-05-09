@@ -3,8 +3,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 ###########################
 ### Install apt packages
-### G++-9 need only for build pytorch with cuda
-### Ninja-build need to build torchaudio
+### g++-9 need to build pytorch with cuda
+### ninja-build, pkg-config need to build torchaudio
 ###########################
 
 RUN apt-get update && \
@@ -33,7 +33,8 @@ RUN apt-get update && \
         libsndfile1 \
         sox \
         libncurses5 \
-        ninja-build && \
+        ninja-build \
+        pkg-config && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3.9 39 && \
@@ -167,7 +168,8 @@ RUN git clone https://github.com/pytorch/audio.git && \
     git submodule update --init --recursive && \
     CC="/usr/bin/gcc-9" \
     CXX="/usr/bin/g++-9" \
-    BUILD_SOX=1 python setup.py install && \
+    BUILD_SOX=1 \
+    python setup.py install && \
     cd .. && \
     rm -r audio
 
