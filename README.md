@@ -2,7 +2,7 @@
 
 Use following command to run docker container:
 ```
-docker run --runtime=nvidia --network="host" --shm-size 256m -i -t -d [image] /bin/bash
+docker run --runtime=nvidia --network="host" --shm-size 256m -i -t [image] /bin/bash
 ```
 For mount some folder use `-v from:to`.
 
@@ -12,7 +12,7 @@ Description of some options:
 
 - `-i` join input stream
 - `-t` join terminal
-- `-d` detach from container, because without this option container will be stoped after close
+- `-d` detach from container
 
 Then we can run jupyter notebook using following command inside docker container:
 ```
