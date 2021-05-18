@@ -126,7 +126,8 @@ RUN curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py && \
         pesq \
         pylint \
         einops \
-        mypy && \
+        mypy \
+        cython && \
     pip cache purge
 
 ###########################
