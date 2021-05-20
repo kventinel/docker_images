@@ -34,7 +34,8 @@ RUN apt-get update && \
         sox \
         libncurses5 \
         ninja-build \
-        pkg-config && \
+        pkg-config \
+        gdb && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3.9 39 && \

@@ -28,7 +28,8 @@ RUN apt-get update && \
         cmake \
         htop \
         libsndfile1 \
-        sox && \
+        sox \
+        gdb && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3.9 39 && \

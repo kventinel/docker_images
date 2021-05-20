@@ -31,7 +31,8 @@ RUN apt-get update && \
         libbz2-dev \
         liblzma-dev \
         libsqlite3-dev \
-        sox && \
+        sox \
+        gdb && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean && \
     /bin/bash -c 'for filename in /usr/bin/llvm-*; do update-alternatives --install ${filename:: -3} ${filename:9: -3} ${filename} 10; done' && \
