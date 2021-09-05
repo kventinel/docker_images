@@ -96,7 +96,8 @@ RUN curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py && \
         einops \
         mypy \
         cython \
-        yfinance && \
+        yfinance \
+        mmh3 && \
     pip install -f https://download.pytorch.org/whl/torch_stable.html \
         torch==1.9.0+cu111 \
         torchvision==0.10.0+cu111 \
