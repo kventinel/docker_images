@@ -2,7 +2,7 @@
 
 Use following command to run docker container:
 ```
-docker run --runtime=nvidia --network="host" --shm-size 256m -i -t [image] /bin/bash
+docker run --runtime=nvidia --network="host" --shm-size 2G -i -t [image] /bin/bash
 ```
 For mount some folder use `-v from:to`.
 
