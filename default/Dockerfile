@@ -102,6 +102,7 @@ RUN curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py && \
         torch==1.9.0+cu111 \
         torchvision==0.10.0+cu111 \
         torchaudio==0.9.0 && \
+    pip install transformers && \
     pip cache purge
 
 ###########################
@@ -130,4 +131,7 @@ RUN git clone https://github.com/kventinel/configs.git && \
     cd .vim/pack/vendor/start/YouCompleteMe && \
     git submodule update --init --recursive && \
     ./install.py && \
-    cd ~/
+    cd ~/ && \
+    jupyter notebook --generate-config && \
+    echo "c.NotebookApp.iopub_msg_rate_limit = 100000" >> .jupyter/jupyter_notebook_config.py && \
+    echo "c.NotebookApp.rate_limit_window = 10" >> .jupyter/jupyter_notebook_config.py
